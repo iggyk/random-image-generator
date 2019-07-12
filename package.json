@@ -1,0 +1,17 @@
+{
+  "name": "imagegen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "random.js",
+  "dependencies": {
+    "canvas": "^2.5.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "random": "./bin/random.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
