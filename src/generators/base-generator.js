@@ -20,6 +20,13 @@ module.exports = class BaseGenerator {
     }
 
     generate() {
+        let numberOfIterations = 1 + Math.floor(Math.random() * 50);
+        while (numberOfIterations--) {
+            this.applyRandomContent(this.context);
+        }
+    }
+
+    applyRandomContent(context) {
     }
 
     export() {

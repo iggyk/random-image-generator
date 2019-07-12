@@ -9,6 +9,7 @@ module.exports = class Arguments {
         this.format = "image/jpeg";
         this.imageNameTemplate = 'random-image-{width}-{height}-{serial}';
         this.helpOnly = false;
+        this.multiGenerator = false;
         try {
             this.processArguments(args);
         }
@@ -31,6 +32,7 @@ Supported options:
     [size:<width>x<height>] - shorthand for dimensions
     [format:<format>] - jpeg or png
     [template:<template string>] - filename template, see below
+    [mutliple|multi|combo] - use multiple generators on the same image
     [output:<path>] - where to store the files
 
 - width/height limit range is 1-10000 pixels; all values will be truncated to nearest min/max
@@ -79,6 +81,11 @@ Supported options:
                     break;
                 case "total":
                     this.totalImages = Math.max(0,parseInt(argParts[1],10));
+                    break;
+                case "multiple":
+                case "multi":
+                case "combo":
+                    this.multiGenerator = true;
                     break;
                 case "target":
                 case "output":

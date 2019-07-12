@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const Arguments = require("../src/args/arguments");
 const generators = [require("../src/generators/lines"), require("../src/generators/circles")];
+const multiGenerator = require("../src/generators/mulit-generator");
 
 const runtime = new Arguments(process.argv);
 
@@ -14,10 +15,15 @@ try {
     // Start working
     for (let i = 0; i < runtime.totalImages; i++) {
         // Generate image
-        const genInstance = randomGenerator();
-        genInstance.generate();
+        let instance;
+        if (runtime.multiGenerator) {
+            instance = new multiGenerator(runtime, generators);
+        } else {
+            instance = randomGenerator();
+        }
+        instance.generate();
         // Convert to bitmap data
-        const imageData = genInstance.export();
+        const imageData = instance.export();
         // Save
         const fileName = convertFileName(runtime.imageNameTemplate, i);
         fs.writeFileSync(path.join(runtime.targetFolder, fileName), imageData);
