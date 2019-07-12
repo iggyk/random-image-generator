@@ -22,6 +22,9 @@ try {
             instance = randomGenerator();
         }
         instance.generate();
+        if (runtime.watermark) {
+            watermark(instance.context, i);
+        }
         // Convert to bitmap data
         const imageData = instance.export();
         // Save
@@ -35,6 +38,24 @@ catch(err) {
 
 function randomGenerator() {
     return new generators[Math.floor(Math.random() * generators.length)](runtime);
+}
+
+/**
+ * @param {CanvasRenderingContext2D} context 
+ */
+function watermark(context, index) {
+    context.save();
+    context.font = "normal normal 12px sans";
+    context.fillStyle = "#000";
+    context.textAlign = "left";
+    const mark = (index + 1).toString();
+    const measure = context.measureText(mark);
+    if (measure.width > runtime.width || (measure.emHeightAscent + measure.emHeightDescent) > runtime.height) {
+        context.restore();
+        return;
+    }
+    context.fillText(mark, 1, 1 + measure.emHeightAscent + measure.emHeightDescent);
+    context.restore();
 }
 
 function convertFileName(template, instanceCount) {

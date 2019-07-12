@@ -10,6 +10,7 @@ module.exports = class Arguments {
         this.imageNameTemplate = 'random-image-{width}-{height}-{serial}';
         this.helpOnly = false;
         this.multiGenerator = false;
+        this.watermark = false;
         try {
             this.processArguments(args);
         }
@@ -33,6 +34,7 @@ Supported options:
     [format:<format>] - jpeg or png
     [template:<template string>] - filename template, see below
     [mutliple|multi|combo] - use multiple generators on the same image
+    [watermark|mark] - mark the serial number on the image. If the image is too small to fit the watermark, it will not be rendered
     [output:<path>] - where to store the files
 
 - width/height limit range is 1-10000 pixels; all values will be truncated to nearest min/max
@@ -91,6 +93,10 @@ Supported options:
                 case "output":
                     this.targetFolder = path.normalize(argParts[1]);
                     console.log(this.targetFolder);
+                    break;
+                case "watermark":
+                case "mark":
+                    this.watermark = true;
                     break;
                 case "template":
                     this.imageNameTemplate = argParts[1];
