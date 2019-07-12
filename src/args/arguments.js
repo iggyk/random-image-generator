@@ -23,12 +23,24 @@ module.exports = class Arguments {
         console.log(`
 Please provide a properly formatted set of arguments:
 
-node random [total:]<number of images> [width:<width>] [height:<height>] [format:image/jpeg|image/png] [template:<template string>] [output:<path>]
+node random [total:]<number of images> [options]
+
+Supported options:
+    [width:<width>] - width, in pixels
+    [height:<height>] - height, in pixels
+    [size:<width>x<height>] - shorthand for dimensions
+    [format:<format>] - jpeg or png
+    [template:<template string>] - filename template, see below
+    [output:<path>] - where to store the files
 
 - width/height limit range is 1-10000 pixels; all values will be truncated to nearest min/max
 - By default, the generator will produce 5 100x100px JPG images in the work folder.
 - By default, the image template is 'random-image-{width}-{height}-{serial}', where each token is replaced by the corresponding value.
         `);
+    }
+
+    parseAsRangedInt(string, min = 1, max = 10000) {
+        return Math.min(max, Math.max(min, parseInt(string,10)));
     }
 
     /**
@@ -47,17 +59,23 @@ node random [total:]<number of images> [width:<width>] [height:<height>] [format
                     // Nothing to do here
                     break;
                 case "width":
-                    this.width = Math.min(10000, Math.max(1, parseInt(argParts[1],10)));
+                    this.width = this.parseAsRangedInt(argParts[1]);
                     break;
                 case "height":
-                    this.height = Math.min(10000, Math.max(1, parseInt(argParts[1],10)));
+                    this.height = this.parseAsRangedInt(argParts[1]);
+                    break;
+                case "size":
+                    const parts = argParts[1].split("x");
+                    if (parts.length < 2) break;
+                    this.width = this.parseAsRangedInt(parts[0]);
+                    this.height = this.parseAsRangedInt(parts[1]);
                     break;
                 case "format":
                     const format = argParts[1].toLowerCase();
-                    if (format !== "image/jpeg" && format !== "image/png") {
+                    if (format !== "jpeg" && format !== "png") {
                         throw new Error(`Invalid format: ${format}`);
                     }
-                    this.format = format;
+                    this.format = `image/${format}`;
                     break;
                 case "total":
                     this.totalImages = Math.max(0,parseInt(argParts[1],10));
