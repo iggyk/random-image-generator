@@ -11,6 +11,12 @@ module.exports = class BaseGenerator {
         this.context = this.canvas.getContext("2d");
         this.context.fillStyle = "#fff";
         this.context.fillRect(0,0,this.runtime.width, this.runtime.height);
+
+        this.visiblePathWidth = Math.max(this.runtime.width, this.runtime.height) / 100;
+    }
+
+    getRandomStrokeWidth() {
+        return this.visiblePathWidth * (1 + (Math.random() > 0.5 ? 1: -1) * (Math.random() / 2));;
     }
 
     generate() {

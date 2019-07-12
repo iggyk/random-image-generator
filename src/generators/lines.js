@@ -8,7 +8,7 @@ module.exports = class LinesImage extends BaseGenerator {
             this.context.save();
             this.context.beginPath();
             this.context.strokeStyle = ColorGenerator.randomColorAsRGBA();
-            this.context.lineWidth = 1 + Math.floor(Math.random() * 2);
+            this.context.lineWidth = this.getRandomStrokeWidth();
             this.context.moveTo(Math.random() * this.runtime.width, Math.random() * this.runtime.height);
             this.context.lineTo(Math.random() * this.runtime.width, Math.random() * this.runtime.height);
             this.context.stroke();

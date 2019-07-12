@@ -1,6 +1,6 @@
 {
   "name": "imagegen",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "random.js",
   "dependencies": {
