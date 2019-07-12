@@ -1,8 +1,7 @@
 const BaseGenerator = require("./base-generator");
 const ColorGenerator = require("./color");
 
-module.exports = class CirclesImage extends BaseGenerator {
-    
+module.exports = class RectanglesImage extends BaseGenerator {
     /**
      * @override
      * @param {CanvasRenderingContext2D} context 
@@ -13,15 +12,19 @@ module.exports = class CirclesImage extends BaseGenerator {
         context.strokeStyle = ColorGenerator.randomColorAsRGBA();
         context.lineWidth = this.getRandomStrokeWidth();
         const filled = Math.random() > 0.5;
-        const radius = Math.max(1, Math.random() * (Math.random() > 0.5 ? this.runtime.width : this.runtime.height) / 3);
-        context.arc(Math.random() * this.runtime.width, Math.random() * this.runtime.height, radius, 0, Math.PI*2);
+        const x = Math.random() * this.runtime.width * 0.5;
+        const y = Math.random() * this.runtime.height * 0.5;
+        const width = Math.random() * this.runtime.width * 0.5;
+        const height = Math.random() * this.runtime.height * 0.5;
+        const angle = Math.random() * Math.PI * 2;
+        context.rotate(angle);
         if (filled) {
             // Filled circle
             context.fillStyle = ColorGenerator.randomColorAsRGBA();
-            context.fill();
+            context.fillRect(x,y,width,height);
         } else {
             // Empty
-            context.stroke();
+            context.strokeRect(x,y,width,height);
         }
         context.restore();
     }

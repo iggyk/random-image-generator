@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const Arguments = require("../src/args/arguments");
-const generators = [require("../src/generators/lines"), require("../src/generators/circles")];
+const generators = [require("../src/generators/lines"), require("../src/generators/circles"), require("../src/generators/rectangles")];
 const multiGenerator = require("../src/generators/mulit-generator");
 
 const runtime = new Arguments(process.argv);

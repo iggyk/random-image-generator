@@ -26,6 +26,9 @@ module.exports = class BaseGenerator {
         }
     }
 
+    /**
+     * @param {CanvasRenderingContext2D} context 
+     */
     applyRandomContent(context) {
     }
 

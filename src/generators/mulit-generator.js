@@ -21,6 +21,10 @@ module.exports = class MultiGenerator extends BaseGenerator {
         super.generate();
     }
 
+    /**
+     * @override
+     * @param {CanvasRenderingContext2D} context 
+     */
     applyRandomContent(context) {
         const index = Math.round(Math.random() * this.instances.length * 10) % this.instances.length;
         const instance = this.instances[index];
