@@ -34,7 +34,11 @@ module.exports = class BaseGenerator {
 
     export() {
         // Export canvas as encoded bitmap
-        return this.canvas.toBuffer(this.runtime.format);
+        let options = undefined;
+        if (this.runtime.format === "image/jpeg") {
+            options = { quality: this.runtime.jpegQuality };
+        }
+        return this.canvas.toBuffer(this.runtime.format, options);
     }
 
 }

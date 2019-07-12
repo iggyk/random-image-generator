@@ -11,6 +11,7 @@ module.exports = class Arguments {
         this.helpOnly = false;
         this.multiGenerator = false;
         this.watermark = false;
+        this.jpegQuality = 0.75;
         try {
             this.processArguments(args);
         }
@@ -35,6 +36,7 @@ Supported options:
     [template:<template string>] - filename template, see below
     [mutliple|multi|combo] - use multiple generators on the same image
     [watermark|mark] - mark the serial number on the image. If the image is too small to fit the watermark, it will not be rendered
+    [quality:<0..1>] - JPEG encoding quality; defaults to 0.75
     [output:<path>] - where to store the files
 
 - width/height limit range is 1-10000 pixels; all values will be truncated to nearest min/max
@@ -97,6 +99,9 @@ Supported options:
                 case "watermark":
                 case "mark":
                     this.watermark = true;
+                    break;
+                case "quality":
+                    this.jpegQuality = parseFloat(argParts[1]);
                     break;
                 case "template":
                     this.imageNameTemplate = argParts[1];
