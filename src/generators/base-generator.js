@@ -20,7 +20,12 @@ module.exports = class BaseGenerator {
     }
 
     generate() {
-        let numberOfIterations = 1 + Math.floor(Math.random() * 50);
+        // Approximate the number of iterations as 1 per each 50 square pixels
+        let numberOfIterations = 1 + Math.floor((this.runtime.width * this.runtime.height) / 2500);
+        // Use provided number of iteration if present
+        if (this.runtime.iterations !== -1) {
+            numberOfIterations = this.runtime.iterations;
+        }
         while (numberOfIterations--) {
             this.applyRandomContent(this.context);
         }

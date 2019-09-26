@@ -13,7 +13,9 @@ module.exports = class CirclesImage extends BaseGenerator {
         context.strokeStyle = ColorGenerator.randomColorAsRGBA();
         context.lineWidth = this.getRandomStrokeWidth();
         const filled = Math.random() > 0.5;
-        const radius = Math.max(1, Math.random() * (Math.random() > 0.5 ? this.runtime.width : this.runtime.height) / 3);
+        const divisor = 1 + Math.random() * 5;
+        const dimension = Math.random() > 0.5 ? this.runtime.width : this.runtime.height;
+        const radius = Math.max(1, (Math.random() * dimension) / divisor);
         context.arc(Math.random() * this.runtime.width, Math.random() * this.runtime.height, radius, 0, Math.PI*2);
         if (filled) {
             // Filled circle

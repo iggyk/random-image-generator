@@ -3,10 +3,18 @@
 const fs = require("fs");
 const path = require("path");
 const Arguments = require("../src/args/arguments");
-const generators = [require("../src/generators/lines"), require("../src/generators/circles"), require("../src/generators/rectangles")];
-const multiGenerator = require("../src/generators/mulit-generator");
+const generators = new Map([
+    ["lines", require("../src/generators/lines")],
+    ["circles", require("../src/generators/circles")], 
+    ["rectangles", require("../src/generators/rectangles")],
+    ["dots", require("../src/generators/dots")]
+]);
+const generatorNames = [];
+const generatorClasses = [];
+generators.forEach((g,k) => { generatorNames.push(k); generatorClasses.push(g); });
+const multiGenerator = require("../src/generators/multi-generator");
 
-const runtime = new Arguments(process.argv);
+const runtime = new Arguments(generatorNames, process.argv);
 
 if (runtime.helpOnly) return;
 try {
@@ -14,13 +22,28 @@ try {
     if (!fs.existsSync(runtime.targetFolder)) throw new Error("Invalid target path");
     // Start working
     for (let i = 0; i < runtime.totalImages; i++) {
-        // Generate image
+        // Gather the required generators
         let instance;
-        if (runtime.multiGenerator) {
-            instance = new multiGenerator(runtime, generators);
-        } else {
+        if (runtime.generatorNames.length === 0) {
             instance = randomGenerator();
+        } else if (runtime.generatorNames.length === 1) {
+            switch (runtime.generatorNames[0]) {
+                case 'all':
+                    instance = new multiGenerator(runtime, generatorClasses);
+                    break;
+                case 'random':
+                case 'any':
+                    instance = randomGenerator();
+                    break;
+                default:
+                    instance = specificGenerators();
+                    break;
+            }
+        } else {
+            instance = specificGenerators();
         }
+
+        // Generate image
         instance.generate();
         if (runtime.watermark) {
             watermark(instance.context, i);
@@ -37,7 +60,12 @@ catch(err) {
 }
 
 function randomGenerator() {
-    return new generators[Math.floor(Math.random() * generators.length)](runtime);
+    return new generatorClasses[Math.floor(Math.random() * generatorClasses.length)](runtime);
+}
+
+function specificGenerators() {
+    const customGeneratorCollection = runtime.generatorNames.map(gn => generators.get(gn));
+    return new multiGenerator(runtime, customGeneratorCollection);
 }
 
 /**
