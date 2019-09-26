@@ -21,6 +21,10 @@ module.exports = class MultiGenerator extends BaseGenerator {
         super.generate();
     }
 
+    get name() {
+        return 'Multi-generator';
+    }
+
     /**
      * @override
      * @param {CanvasRenderingContext2D} context 

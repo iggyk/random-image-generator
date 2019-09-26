@@ -14,6 +14,7 @@ module.exports = class Arguments {
         this.generatorNames = [];
         this.supportedGenerators = supportedGenerators;
         this.iterations = -1;
+        this.verbose = false;
         try {
             this.processArguments(args);
         }
@@ -45,6 +46,7 @@ Supported options:
     [watermark|mark] - mark the serial number on the image. If the image is too small to fit the watermark, it will not be rendered
     [quality:<0..1>] - JPEG encoding quality; defaults to 0.75
     [output:<path>] - where to store the files
+    [verbose] - verbose generation logging
 
 - width/height limit range is 1-10000 pixels; all values will be truncated to nearest min/max
 - By default, the generator will produce 5 100x100px JPG images in the work folder.
@@ -144,6 +146,9 @@ Supported options:
                     }
                     this.iterations = Math.min(10000, Math.max(this.iterations, 50));
                     this.helpOnly = false;
+                    break;
+                case "verbose":
+                    this.verbose = true;
                     break;
                 default:
                     const argAsInt = parseInt(argParts[0],10);

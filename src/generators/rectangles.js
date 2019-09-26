@@ -2,6 +2,11 @@ const BaseGenerator = require("./base-generator");
 const ColorGenerator = require("./color");
 
 module.exports = class RectanglesImage extends BaseGenerator {
+
+    get name() {
+        return 'Rectangles';
+    }
+
     /**
      * @override
      * @param {CanvasRenderingContext2D} context 

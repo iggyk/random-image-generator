@@ -15,4 +15,12 @@ module.exports = class DotsImage extends BaseGenerator {
         context.fillRect(Math.random() * (this.runtime.width - size), Math.random() * (this.runtime.height - size), size, size);
         context.restore();
     }
+
+    get name() {
+        return 'Dots';
+    }
+
+    getDefaultIterations() {
+        return super.getDefaultIterations() * 10;
+    }
 }

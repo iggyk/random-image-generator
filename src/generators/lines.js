@@ -2,6 +2,11 @@ const BaseGenerator = require("./base-generator");
 const ColorGenerator = require("./color");
 
 module.exports = class LinesImage extends BaseGenerator {
+
+    get name() {
+        return 'Lines';
+    }
+
     applyRandomContent(context) {
         context.save();
         context.beginPath();

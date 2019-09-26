@@ -14,30 +14,52 @@ module.exports = class BaseGenerator {
         this.context.fillRect(0,0,this.runtime.width, this.runtime.height);
 
         this.visiblePathWidth = Math.max(this.runtime.width, this.runtime.height) / 100;
+        this.iterations = this.runtime.iterations !== -1 ? this.runtime.iterations : this.getDefaultIterations();
+        if (this.runtime.verbose) {
+            console.log(`-- ${this.name}: generating (${runtime.width}x${runtime.height}) [${runtime.format}] using ${this.iterations} iterations`);
+        }
     }
 
+    get name() {
+        throw new Error('Not implemented');
+    }
+
+    /**
+     * @protected
+     */
     getRandomStrokeWidth() {
         return this.visiblePathWidth * (1 + (Math.random() > 0.5 ? 1: -1) * (Math.random() / 2));;
     }
 
+    /**
+     * @public
+     */
     generate() {
-        // Approximate the number of iterations as 1 per each 50 square pixels
-        let numberOfIterations = 1 + Math.floor((this.runtime.width * this.runtime.height) / 2500);
-        // Use provided number of iteration if present
-        if (this.runtime.iterations !== -1) {
-            numberOfIterations = this.runtime.iterations;
-        }
+        let numberOfIterations = this.iterations;
         while (numberOfIterations--) {
             this.applyRandomContent(this.context);
         }
     }
 
     /**
+     * @protected
+     * @return {number}
+     */
+    getDefaultIterations() {
+        // One element per 25 sq.px should be enough
+        return Math.max(1, Math.floor((this.runtime.width * this.runtime.height) / 625));
+    }
+
+    /**
+     * @protected
      * @param {CanvasRenderingContext2D} context 
      */
     applyRandomContent(context) {
     }
 
+    /**
+     * @public
+     */
     export() {
         // Export canvas as encoded bitmap
         let options = undefined;
