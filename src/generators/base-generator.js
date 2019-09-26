@@ -5,8 +5,9 @@ module.exports = class BaseGenerator {
     /**
      * @param {Arguments} runtime 
      */
-    constructor(runtime) {
+    constructor(runtime, preventCanvasCreation = false) {
         this.runtime = runtime;
+        if (preventCanvasCreation) return;
         this.canvas = createCanvas(this.runtime.width, this.runtime.height);
         this.context = this.canvas.getContext("2d");
         this.context.fillStyle = "#fff";

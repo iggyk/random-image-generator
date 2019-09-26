@@ -17,7 +17,7 @@ module.exports = class MultiGenerator extends BaseGenerator {
     }
 
     generate() {
-        this.instances = this.generators.map(genClass => new genClass(this.runtime));
+        this.instances = this.generators.map(genClass => new genClass(this.runtime, true));
         super.generate();
     }
 
