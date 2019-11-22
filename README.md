@@ -16,3 +16,10 @@ Once installed, the utility should be available globally in command line.
 Run `random --help` to get a summary of the parameters.
 
 Running `random` without any parameters will generate 5 random 100x100 px images in the working directory.
+
+## Changelog
+
+#### 1.0.9
+- Added progress bar to track image generation status
+- Added task summary to be displayed
+- Added `jpg` as a valid format (translates into `jpeg` internally)

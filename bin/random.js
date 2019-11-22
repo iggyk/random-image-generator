@@ -20,6 +20,7 @@ if (runtime.helpOnly) return;
 try {
     // Make sure the output path exists
     if (!fs.existsSync(runtime.targetFolder)) throw new Error("Invalid target path");
+    console.log(`Generating ${runtime.toString()}`);
     // Start working
     for (let i = 0; i < runtime.totalImages; i++) {
         // Gather the required generators
@@ -44,6 +45,7 @@ try {
         }
 
         // Generate image
+        rewriteLine(generateProgressBar(i, runtime.totalImages));
         instance.generate();
         if (runtime.watermark) {
             watermark(instance.context, i);
@@ -54,9 +56,32 @@ try {
         const fileName = convertFileName(runtime.imageNameTemplate, i);
         fs.writeFileSync(path.join(runtime.targetFolder, fileName), imageData);
     }
+    rewriteLine(generateProgressBar(runtime.totalImages, runtime.totalImages));
+    console.log('\nDone');
 }
 catch(err) {
     console.error(`Runtime error: ${err}`);
+}
+
+function generateProgressBar(done, total) {
+    const prompt = "Progress: ";
+    const opening = "[";
+    const closing = "]  ";
+    const empty = "_";
+    const full = "X";
+    const leftoverColumns = process.stdout.columns - prompt.length - opening.length - closing.length;
+    const fulls = Math.round((done / total) * leftoverColumns);
+    const resultArray = new Array(leftoverColumns);
+    for (let i = 0; i < leftoverColumns; i++) {
+        resultArray[i] = i <= fulls ? full : empty;
+    }
+    return `${prompt}${opening}${resultArray.join("")}${closing}`;
+}
+
+function rewriteLine(message, clear = false) {
+    if (clear) process.stdout.clearLine();
+    process.stdout.cursorTo(0);
+    process.stdout.write(message);
 }
 
 function randomGenerator() {

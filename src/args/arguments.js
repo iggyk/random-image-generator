@@ -25,6 +25,12 @@ module.exports = class Arguments {
         }
     }
 
+    toString() {
+        const format = this.format.replace("image/","").toUpperCase();
+        return `${this.totalImages} ${this.width}x${this.height} ${format}${this.totalImages > 1 ? 's' : ''} using ${this.generatorNames.join(",")}
+Output folder: ${this.targetFolder}`;
+    }
+
     help() {
         console.log(`
 Please provide a properly formatted set of arguments:
@@ -89,7 +95,8 @@ Supported options:
                     this.helpOnly = false;
                     break;
                 case "format":
-                    const format = argParts[1].toLowerCase();
+                    let format = argParts[1].toLowerCase();
+                    if (format === "jpg") format = "jpeg";
                     if (format !== "jpeg" && format !== "png") {
                         throw new Error(`Invalid format: ${format}`);
                     }
