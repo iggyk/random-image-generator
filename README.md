@@ -17,6 +17,11 @@ Run `random --help` to get a summary of the parameters. Running `random` without
 
 ## Changelog
 
+#### 1.0.11
+- Added `auto` value for `iterations` argument. Iterations now default to 50, capped at 5000.
+- Added iteration capping when calculating number of iterations automatically
+- Wavy generator now knows its own name :)
+
 #### 1.0.10
 - Added `wavy` generator!
 - Updated the progress bar code to be compatible with debugger stdout

@@ -37,6 +37,10 @@ module.exports = class WavyLines extends BaseGenerator {
         context.restore();
     }
 
+    get name() {
+        return 'Wavy';
+    }
+
     getRandomStrokeWidth() {
         return 3 + Math.random() * (Math.max(this.runtime.width, this.runtime.height) / 100);
     }

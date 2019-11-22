@@ -1,6 +1,6 @@
 const path = require("path");
 
-module.exports = class Arguments {
+class Arguments {
     constructor(supportedGenerators, args = []) {
         this.totalImages = 5;
         this.targetFolder = './';
@@ -13,7 +13,7 @@ module.exports = class Arguments {
         this.jpegQuality = 0.75;
         this.generatorNames = [];
         this.supportedGenerators = supportedGenerators;
-        this.iterations = -1;
+        this.iterations = 50;
         this.verbose = false;
         try {
             this.processArguments(args);
@@ -23,6 +23,10 @@ module.exports = class Arguments {
             this.help();
             throw error;
         }
+    }
+
+    static get ITERATION_CAP() {
+        return 5000;
     }
 
     toString() {
@@ -48,7 +52,8 @@ Supported options:
                 'all' will use all available generators randomly
                 'random|any' will use a single randomly picked one
                 'all' and 'random|any' override specific generators
-    [iterations:<number>] - number of iterations per image, defaults to 50, capped at 10000;
+    [iterations:<number>|auto] - number of iterations per image, defaults to 50, capped at ${Arguments.ITERATION_CAP}.
+                If "auto" specified, the generator will try to determine the best value with the cap.
     [watermark|mark] - mark the serial number on the image. If the image is too small to fit the watermark, it will not be rendered
     [quality:<0..1>] - JPEG encoding quality; defaults to 0.75
     [output:<path>] - where to store the files
@@ -147,11 +152,12 @@ Supported options:
                     this.helpOnly = false;
                     break;
                 case "iterations":
-                    this.iterations = parseInt(argParts[1]);
-                    if (isNaN(this.iterations) || typeof this.iterations !== "number") {
-                        this.iterations = 50;
+                    if (argParts[1].toLowerCase() === "auto") {
+                        this.iterations = -1;
+                        this.helpOnly = false;
+                        break;
                     }
-                    this.iterations = Math.min(10000, Math.max(this.iterations, 50));
+                    this.iterations = this.parseAsRangedInt(argParts[1], 1, Arguments.ITERATION_CAP);
                     this.helpOnly = false;
                     break;
                 case "verbose":
@@ -176,3 +182,5 @@ Supported options:
         }
     }
 }
+
+module.exports = Arguments;

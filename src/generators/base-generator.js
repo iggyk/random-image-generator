@@ -1,4 +1,5 @@
 const { createCanvas } = require("canvas");
+const Arguments = require("../args/arguments");
 
 module.exports = class BaseGenerator {
 
@@ -47,7 +48,7 @@ module.exports = class BaseGenerator {
      */
     getDefaultIterations() {
         // One element per 25 sq.px should be enough
-        return Math.max(1, Math.floor((this.runtime.width * this.runtime.height) / 625));
+        return Math.min(Arguments.ITERATION_CAP, Math.max(1, Math.floor((this.runtime.width * this.runtime.height) / 625)));
     }
 
     /**
