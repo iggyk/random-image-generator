@@ -7,7 +7,8 @@ const generators = new Map([
     ["lines", require("../src/generators/lines")],
     ["circles", require("../src/generators/circles")], 
     ["rectangles", require("../src/generators/rectangles")],
-    ["dots", require("../src/generators/dots")]
+    ["dots", require("../src/generators/dots")],
+    ["wavy", require("../src/generators/wavy")]
 ]);
 const generatorNames = [];
 const generatorClasses = [];
@@ -69,19 +70,27 @@ function generateProgressBar(done, total) {
     const closing = "]  ";
     const empty = "_";
     const full = "X";
-    const leftoverColumns = process.stdout.columns - prompt.length - opening.length - closing.length;
-    const fulls = Math.round((done / total) * leftoverColumns);
-    const resultArray = new Array(leftoverColumns);
-    for (let i = 0; i < leftoverColumns; i++) {
-        resultArray[i] = i <= fulls ? full : empty;
+    if (process.stdout.columns) {
+        const totalColumns = process.stdout.columns ? process.stdout.columns : 80;
+        const leftoverColumns = totalColumns - prompt.length - opening.length - closing.length;
+        const fulls = Math.round((done / total) * leftoverColumns);
+        const resultArray = new Array(leftoverColumns);
+        for (let i = 0; i < leftoverColumns; i++) {
+            resultArray[i] = i <= fulls ? full : empty;
+        }
+        return `${prompt}${opening}${resultArray.join("")}${closing}`;
     }
-    return `${prompt}${opening}${resultArray.join("")}${closing}`;
+    return `${Math.round((done / total) * 100)}%`;
 }
 
 function rewriteLine(message, clear = false) {
-    if (clear) process.stdout.clearLine();
-    process.stdout.cursorTo(0);
-    process.stdout.write(message);
+    if (clear && process.stdout.clearLine) process.stdout.clearLine();
+    if (process.stdout.cursorTo) {
+        process.stdout.cursorTo(0);
+        process.stdout.write(message);
+    } else {
+        console.log(message);
+    }
 }
 
 function randomGenerator() {

@@ -1,9 +1,9 @@
 module.exports = class ColorGenerator {
-    static randomColorAsRGBA() {
+    static randomColorAsRGBA(transparencyBias = 1) {
         const r = Math.floor(Math.random() * 255);
         const g = Math.floor(Math.random() * 255);
         const b = Math.floor(Math.random() * 255);
-        const a = Math.random();
+        const a = Math.random() * transparencyBias;
         return `rgba(${r},${g},${b},${a})`;
     }
 

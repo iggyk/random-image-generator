@@ -13,11 +13,14 @@ There's no `npm` installation at the moment. To install on local machine, clone 
 ## Usage
 Once installed, the utility should be available globally in command line.
 
-Run `random --help` to get a summary of the parameters.
-
-Running `random` without any parameters will generate 5 random 100x100 px images in the working directory.
+Run `random --help` to get a summary of the parameters. Running `random` without any parameters will display help as well.
 
 ## Changelog
+
+#### 1.0.10
+- Added `wavy` generator!
+- Updated the progress bar code to be compatible with debugger stdout
+- Random RGBA color can now be biased on alpha-channel
 
 #### 1.0.9
 - Added progress bar to track image generation status
