@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Random Image Generator {version}</title>
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <script src="web-app.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <h1>Random Image Generator</h1>
+    <h2>version {version}</h2>
+    <section id="sctOptions">
+        <h3 class="collapsed" id="optionsHeader">Options<span id="icon"></span></h3>
+        <div id="optionsCollapsible" class="hidden">
+            <div><label for="amount">Width:</label><input type="number" id="amount" min="1" value="10"></div>
+            <div><label for="sizeWidth">Width:</label><input type="number" id="sizeWidth" min="10" max="50000" value="500">px</div>
+            <div><label for="sizeHeight">Height:</label><input type="number" id="sizeHeight" min="10" max="50000" value="500">px</div>
+            <div><label for="iterations">Iterations:</label><input type="number" id="iterations" min="1" max="5000" disabled value="100"></div>
+            <div><label for="iterationsAuto">auto</label><input type="checkbox" id="iterationsAuto" checked></div>
+            <h4>Generators to use:</h4>
+            <div>
+                <input type="radio" name="rdGeneratorGroup" id="randomGenerator"><label for="randomGenerator">Random</label>
+                <input type="radio" name="rdGeneratorGroup" id="allGenerators" checked><label for="allGenerators">All</label>
+                <input type="radio" name="rdGeneratorGroup" id="specificGenerators"><label for="specificGenerators">Specific:</label>
+            </div>
+            <div id="generatorsList"></div>
+        </div>
+        <span class="clear"></span>
+    </section>
+    <section><button id="generate">Generate!</button></section>
+    <section id="sctResult">
+    </section>
+</body>
+
+</html>

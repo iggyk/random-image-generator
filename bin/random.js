@@ -2,12 +2,12 @@
 
 const fs = require("fs");
 const path = require("path");
-const Arguments = require("../src/args/arguments");
+const CliArguments = require("../src/args/cli-arguments");
 const { createCanvas } = require("canvas");
 const Generators = require("../src/common/image-generators");
 
 const generators = new Generators(createCanvas);
-const runtime = new Arguments(generators.names, process.argv);
+const runtime = new CliArguments(generators.names, process.argv);
 
 if (runtime.helpOnly) return;
 try {

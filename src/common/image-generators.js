@@ -26,6 +26,12 @@ class Generators {
         return _generatorClasses;
     }
 
+    namesToClasses(names) {
+        const classes = [];
+        names.forEach(name => classes.push(_generators.get(name)));
+        return classes;
+    }
+
     /**
      * @public
      * @param {string} name 
@@ -36,6 +42,16 @@ class Generators {
     createGeneratorInstance(name, runtime, preventCanvasCreation = false) {
         if (!_generators.has(name)) throw new Error(`Unrecognized generator id: ${name}`);
         return new _generators.get(name)(runtime, this.createCanvas, preventCanvasCreation);
+    }
+
+    /**
+     * @public
+     * @param {Arguments} runtime
+     * @return {BaseGenerator}
+     */
+    createRandomGeneratorInstance(runtime) {
+        const name = _generatorNames[Math.floor(Math.random() * _generatorNames.length * 10) % _generatorNames.length];
+        return this.createGeneratorInstance(name, runtime);
     }
 
     /**

@@ -1,17 +1,23 @@
 {
-  "name": "imagegen",
-  "version": "1.0.11",
-  "description": "",
-  "main": "random.js",
-  "dependencies": {
-    "canvas": "^2.5.0"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "bin": {
-    "random": "./bin/random.js"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "imagegen",
+    "version": "1.1.0",
+    "description": "",
+    "main": "random.js",
+    "dependencies": {
+        "canvas": "^2.5.0"
+    },
+    "scripts": {
+        "prep-dist": "rm -rf dist && mkdir dist && cp ./src/web/**.html dist && cp ./src/web/**.css dist",
+        "build": "npm run prep-dist && webpack",
+        "dev": "npm run prep-dist && webpack --watch"
+    },
+    "bin": {
+        "random": "./bin/random.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "webpack": "^4.41.2",
+        "webpack-cli": "^3.3.10"
+    }
 }
