@@ -3,19 +3,11 @@
 const fs = require("fs");
 const path = require("path");
 const Arguments = require("../src/args/arguments");
-const generators = new Map([
-    ["lines", require("../src/generators/lines")],
-    ["circles", require("../src/generators/circles")], 
-    ["rectangles", require("../src/generators/rectangles")],
-    ["dots", require("../src/generators/dots")],
-    ["wavy", require("../src/generators/wavy")]
-]);
-const generatorNames = [];
-const generatorClasses = [];
-generators.forEach((g,k) => { generatorNames.push(k); generatorClasses.push(g); });
-const multiGenerator = require("../src/generators/multi-generator");
+const { createCanvas } = require("canvas");
+const Generators = require("../src/common/image-generators");
 
-const runtime = new Arguments(generatorNames, process.argv);
+const generators = new Generators(createCanvas);
+const runtime = new Arguments(generators.names, process.argv);
 
 if (runtime.helpOnly) return;
 try {
@@ -31,7 +23,7 @@ try {
         } else if (runtime.generatorNames.length === 1) {
             switch (runtime.generatorNames[0]) {
                 case 'all':
-                    instance = new multiGenerator(runtime, generatorClasses);
+                    instance = generators.createMultiGenerator(runtime, generators.classes);
                     break;
                 case 'random':
                 case 'any':
@@ -59,8 +51,7 @@ try {
     }
     rewriteLine(generateProgressBar(runtime.totalImages, runtime.totalImages));
     console.log('\nDone');
-}
-catch(err) {
+} catch (err) {
     console.error(`Runtime error: ${err}`);
 }
 
@@ -94,12 +85,13 @@ function rewriteLine(message, clear = false) {
 }
 
 function randomGenerator() {
-    return new generatorClasses[Math.floor(Math.random() * generatorClasses.length)](runtime);
+    const name = generators.names[Math.floor(Math.random() * generators.names.length)];
+    return generators.createGeneratorInstance(name, runtime);
 }
 
 function specificGenerators() {
-    const customGeneratorCollection = runtime.generatorNames.map(gn => generators.get(gn));
-    return new multiGenerator(runtime, customGeneratorCollection);
+    const customGeneratorCollection = generators.names.map(gn => generators.get(gn));
+    return generators.createMultiGenerator(runtime, customGeneratorCollection);
 }
 
 /**
@@ -123,9 +115,9 @@ function watermark(context, index) {
 function convertFileName(template, instanceCount) {
     let result = template;
     [
-        {"width": () => runtime.width},
-        {"height": () => runtime.height},
-        {"serial": () => instanceCount}
+        { "width": () => runtime.width },
+        { "height": () => runtime.height },
+        { "serial": () => instanceCount }
     ].forEach(part => {
         const key = Object.keys(part)[0];
         result = result.split(`{${key}}`).join(part[key]());

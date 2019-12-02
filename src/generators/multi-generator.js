@@ -5,10 +5,11 @@ module.exports = class MultiGenerator extends BaseGenerator {
     /**
      * 
      * @param {Arguments} runtime 
+     * @param {() => HTMLCanvasElement} createCanvas
      * @param {Array<Class>} generators 
      */
-    constructor(runtime, generators) {
-        super(runtime);
+    constructor(runtime, createCanvas, generators) {
+        super(runtime, createCanvas);
         this.generators = generators;
         /**
          * @type {Array<BaseGenerator>}
@@ -17,7 +18,7 @@ module.exports = class MultiGenerator extends BaseGenerator {
     }
 
     generate() {
-        this.instances = this.generators.map(genClass => new genClass(this.runtime, true));
+        this.instances = this.generators.map(genClass => new genClass(this.runtime));
         super.generate();
     }
 

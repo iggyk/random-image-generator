@@ -1,18 +1,18 @@
-const { createCanvas } = require("canvas");
 const Arguments = require("../args/arguments");
 
 module.exports = class BaseGenerator {
 
     /**
      * @param {Arguments} runtime 
+     * @param {() => HTMLCanvasElement} createCanvas
      */
-    constructor(runtime, preventCanvasCreation = false) {
+    constructor(runtime, createCanvas, preventCanvasCreation = false) {
         this.runtime = runtime;
-        if (preventCanvasCreation) return;
+        if (!createCanvas || preventCanvasCreation) return;
         this.canvas = createCanvas(this.runtime.width, this.runtime.height);
         this.context = this.canvas.getContext("2d");
         this.context.fillStyle = "#fff";
-        this.context.fillRect(0,0,this.runtime.width, this.runtime.height);
+        this.context.fillRect(0, 0, this.runtime.width, this.runtime.height);
 
         this.visiblePathWidth = Math.max(this.runtime.width, this.runtime.height) / 100;
         this.iterations = this.runtime.iterations !== -1 ? this.runtime.iterations : this.getDefaultIterations();
@@ -29,7 +29,7 @@ module.exports = class BaseGenerator {
      * @protected
      */
     getRandomStrokeWidth() {
-        return this.visiblePathWidth * (1 + (Math.random() > 0.5 ? 1: -1) * (Math.random() / 2));;
+        return this.visiblePathWidth * (1 + (Math.random() > 0.5 ? 1 : -1) * (Math.random() / 2));;
     }
 
     /**
@@ -55,13 +55,12 @@ module.exports = class BaseGenerator {
      * @protected
      * @param {CanvasRenderingContext2D} context 
      */
-    applyRandomContent(context) {
-    }
+    applyRandomContent(context) {}
 
     /**
      * @public
      */
-    export() {
+    export () {
         // Export canvas as encoded bitmap
         let options = undefined;
         if (this.runtime.format === "image/jpeg") {
