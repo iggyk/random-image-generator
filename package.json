@@ -17,6 +17,7 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "jszip": "^3.2.2",
         "webpack": "^4.41.2",
         "webpack-cli": "^3.3.10"
     }

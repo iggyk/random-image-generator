@@ -8,6 +8,8 @@ const createCanvas = (width, height) => {
 const Arguments = require("../args/arguments");
 const generators = new Generators(createCanvas);
 
+const jszip = require("jszip");
+
 window.addEventListener("DOMContentLoaded", () => {
     initUI(generators);
 })
@@ -71,29 +73,93 @@ function initUI(generators) {
     }));
     // Generare action
     qs("#generate").addEventListener("click", () => {
-        // Gather information
-        const runtime = new Arguments(generators.names);
-        runtime.width = parseInt(qs("#sizeWidth").value, 10);
-        runtime.height = parseInt(qs("#sizeHeight").value, 10);
-        runtime.iterations = qs("#iterationsAuto").checked ? -1 : parseInt(qs("#iterations").value, 10);
-        runtime.totalImages = parseInt(qs("#amount").value, 10);
-        // Collect the generators to use for this iteration
-        const isRandom = qs("#randomGenerator").checked;
-        let genNames = [];
-        if (selectedGenerators.size) {
-            selectedGenerators.forEach(sg => genNames.push(sg));
-        } else {
-            genNames = generators.names;
-        }
-        const genClasses = generators.namesToClasses(genNames);
-        // Discard previous items
-        qs("#sctResult").innerHTML = "";
-        // Generate
-        for (let i = 0; i < runtime.totalImages; i++) {
-            const generator = isRandom ?
-                generators.createRandomGeneratorInstance(runtime) : generators.createMultiGenerator(runtime, genClasses);
-            generator.generate();
-            qs("#sctResult").appendChild(generator.canvas);
-        }
+            // Gather information
+            const runtime = new Arguments(generators.names);
+            runtime.width = parseInt(qs("#sizeWidth").value, 10);
+            runtime.height = parseInt(qs("#sizeHeight").value, 10);
+            runtime.iterations = qs("#iterationsAuto").checked ? -1 : parseInt(qs("#iterations").value, 10);
+            runtime.totalImages = parseInt(qs("#amount").value, 10);
+            // Collect the generators to use for this iteration
+            const isRandom = qs("#randomGenerator").checked;
+            let genNames = [];
+            if (selectedGenerators.size) {
+                selectedGenerators.forEach(sg => genNames.push(sg));
+            } else {
+                genNames = generators.names;
+            }
+            const genClasses = generators.namesToClasses(genNames);
+            // Discard previous items
+            const resultContainer = qs("#sctResult");
+            resultContainer.innerHTML = "";
+            // Generate
+            for (let i = 0; i < runtime.totalImages; i++) {
+                const generator = isRandom ?
+                    generators.createRandomGeneratorInstance(runtime) : generators.createMultiGenerator(runtime, genClasses);
+                generator.generate();
+                createPreviewItem(generator.canvas, resultContainer);
+            }
+            qs("#downloadAll").classList.remove("hidden");
+        })
+        // Download all
+    qs("#downloadAll").addEventListener("click", () => {
+        downloadAll();
     })
+}
+
+function createPreviewItem(canvas, container) {
+    const ce = (tagName, props) => {
+        const element = document.createElement(tagName);
+        if (props) {
+            for (let p in props) {
+                element[p] = props[p];
+            }
+        }
+        return element;
+    }
+    const wrapper = ce("div");
+    wrapper.appendChild(canvas);
+    const overlay = ce("span", { className: "overlay" });
+    //const previewControl = ce("button", { innerHTML: "preview" });
+    const downloadControl = ce("button", { innerHTML: "download" });
+    downloadControl.addEventListener("click", () => download(canvas));
+    //overlay.appendChild(previewControl);
+    overlay.appendChild(downloadControl);
+    wrapper.appendChild(overlay);
+    container.appendChild(wrapper);
+}
+
+/**
+ * @param {HTMLCanvasElement} canvas 
+ */
+function download(canvas) {
+    const asDataUrl = canvas.toDataURL("image/jpeg", 1);
+    const a = document.createElement("a");
+    a.setAttribute("href", asDataUrl);
+    a.setAttribute("download", "generated.jpg");
+    a.click();
+}
+
+function downloadAll() {
+    const canvii = document.querySelectorAll("canvas");
+    const zip = new jszip();
+    const promises = [];
+    canvii.forEach((canvas, index) => {
+        promises.push(new Promise((resolve, reject) => {
+            canvas.toBlob(blob => {
+                zip.file(`generated-${index}.jpg`, blob, {
+                    binary: true
+                });
+                resolve();
+            }, "image/jpeg", 1);
+        }))
+    });
+    Promise.all(promises)
+        .then(() => zip.generateAsync({ type: "blob" }))
+        .then(result => {
+            const blob = URL.createObjectURL(result);
+            const a = document.createElement("a");
+            a.setAttribute("href", blob);
+            a.setAttribute("download", "generated.zip");
+            a.click();
+        })
 }

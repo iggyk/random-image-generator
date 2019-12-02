@@ -79,9 +79,32 @@ h4,
     display: none;
 }
 
+#sctResult div {
+    display: inline-block;
+    border: 2px solid #000;
+    margin: 10px;
+    position: relative;
+    padding: 0;
+}
+
+#sctResult div .overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#sctResult div:hover .overlay {
+    background: rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
+
 #sctResult canvas {
     max-width: 200px;
     max-height: 200px;
-    border: 2px solid #000;
-    margin: 10px;
+    padding: 0;
+    margin: 0;
+    display: block;
 }
