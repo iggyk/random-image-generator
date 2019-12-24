@@ -27,6 +27,7 @@ class Generators {
     }
 
     namesToClasses(names) {
+        console.log(`namesToClasses: ${names}`);
         const classes = [];
         names.forEach(name => classes.push(_generators.get(name)));
         return classes;
@@ -40,8 +41,11 @@ class Generators {
      * @return {BaseGenerator}
      */
     createGeneratorInstance(name, runtime, preventCanvasCreation = false) {
+        console.log(`createGeneratorInstance: ${name}`);
         if (!_generators.has(name)) throw new Error(`Unrecognized generator id: ${name}`);
-        return new _generators.get(name)(runtime, this.createCanvas, preventCanvasCreation);
+        const classref = (_generators.get(name));
+        console.log(classref, name);
+        return new classref(runtime, this.createCanvas, preventCanvasCreation);
     }
 
     /**
@@ -57,10 +61,12 @@ class Generators {
     /**
      * @public
      * @param {Arguments} runtime
-     * @param {Array<Class>} customGeneratorsCollection
+     * @param {Array<string>=} optGenNames
      * @return {BaseGenerator}
      */
-    createMultiGenerator(runtime, customGeneratorsCollection) {
+    createMultiGenerator(runtime, optGenNames) {
+        const availableGenerators = optGenNames ? optGenNames : (runtime.generatorNames ? runtime.generatorNames : _generatorNames);
+        const customGeneratorsCollection = availableGenerators.map(g => _generators.get(g));
         return new _multiGenerator(runtime, this.createCanvas, customGeneratorsCollection);
     }
 }

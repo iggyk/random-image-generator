@@ -1,4 +1,5 @@
 const Arguments = require("./arguments");
+const path = require("path");
 
 class CliArguments extends Arguments {
     constructor(supportedGenerators, args = []) {
@@ -130,7 +131,7 @@ Supported options:
                     const expandedGeneratorList = this.supportedGenerators.concat("all", "random");
                     this.generatorNames = argParts[1]
                         .split(",")
-                        .filter(g => expandedGeneratorList.includes(g) !== -1);
+                        .filter(g => expandedGeneratorList.includes(g));
                     if (this.generatorNames.includes("random") || this.generatorNames.length === 0) {
                         console.log(`Unknown generator(s) provided: ${argParts[1]}, will use random`);
                         this.generatorNames = ["random"];
@@ -138,6 +139,7 @@ Supported options:
                     if (this.generatorNames.includes("all")) {
                         this.generatorNames = ["all"];
                     }
+                    console.log(this.generatorNames);
                     this.helpOnly = false;
                     break;
                 case "iterations":

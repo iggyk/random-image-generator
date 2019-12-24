@@ -23,7 +23,8 @@ try {
         } else if (runtime.generatorNames.length === 1) {
             switch (runtime.generatorNames[0]) {
                 case 'all':
-                    instance = generators.createMultiGenerator(runtime, generators.classes);
+                    runtime.generatorNames = generators.names.slice();
+                    instance = generators.createMultiGenerator(runtime);
                     break;
                 case 'random':
                 case 'any':
@@ -90,8 +91,7 @@ function randomGenerator() {
 }
 
 function specificGenerators() {
-    const customGeneratorCollection = generators.names.map(gn => generators.get(gn));
-    return generators.createMultiGenerator(runtime, customGeneratorCollection);
+    return generators.createMultiGenerator(runtime);
 }
 
 /**

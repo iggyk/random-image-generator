@@ -87,14 +87,16 @@ function initUI(generators) {
             } else {
                 genNames = generators.names;
             }
-            const genClasses = generators.namesToClasses(genNames);
             // Discard previous items
             const resultContainer = qs("#sctResult");
             resultContainer.innerHTML = "";
             // Generate
+            const multiGen = generators.createMultiGenerator(runtime, genNames);
+            const getGenerator = isRandom ?
+                () => generators.createRandomGeneratorInstance(runtime) :
+                () => multiGen;
             for (let i = 0; i < runtime.totalImages; i++) {
-                const generator = isRandom ?
-                    generators.createRandomGeneratorInstance(runtime) : generators.createMultiGenerator(runtime, genClasses);
+                const generator = getGenerator();
                 generator.generate();
                 createPreviewItem(generator.canvas, resultContainer);
             }
