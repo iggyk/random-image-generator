@@ -3,9 +3,6 @@
     "version": "1.1.0",
     "description": "",
     "main": "random.js",
-    "dependencies": {
-        "canvas": "^2.5.0"
-    },
     "scripts": {
         "prep-dist": "rm -rf dist && mkdir dist && cp ./src/web/**.html dist && cp ./src/web/**.css dist",
         "build": "npm run prep-dist && webpack",
@@ -17,8 +14,11 @@
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "jszip": "^3.2.2",
-        "webpack": "^4.41.2",
-        "webpack-cli": "^3.3.10"
+        "jszip": "3.5.0",
+        "webpack": "4.43.0",
+        "webpack-cli": "3.3.12"
+    },
+    "dependencies": {
+        "canvas": "2.6.1"
     }
 }
