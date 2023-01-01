@@ -15,8 +15,8 @@
     "license": "ISC",
     "devDependencies": {
         "jszip": "3.5.0",
-        "webpack": "4.43.0",
-        "webpack-cli": "3.3.12"
+        "webpack": "5.75.0",
+        "webpack-cli": "5.0.1"
     },
     "dependencies": {
         "canvas": "2.6.1"
